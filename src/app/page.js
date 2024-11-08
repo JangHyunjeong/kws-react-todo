@@ -26,7 +26,7 @@ export default function Home() {
   }
 
   // newTodo 추가
-  function addNewTodo() {
+  const addNewTodo = () => {
     if (newTodo.trim() === "") {
       alert("내용을 입력해주세요");
       return;
@@ -36,39 +36,40 @@ export default function Home() {
       content: newTodo,
       isDone: false,
     };
-    setTodoList([todoObj, ...todoList]);
+    setTodoList((prev) => [todoObj, ...prev]);
     setNewTodo("");
-  }
+  };
 
   // todo 삭제
-  function deleteTodo(e) {
-    const updatedTodoList = todoList.filter((item) => item.id !== e.id);
-    setTodoList(updatedTodoList);
-  }
+  const deleteTodo = (e) => {
+    setTodoList((prev) => prev.filter((item) => item.id !== e.id));
+  };
 
   // todo 완료
-  function handleDone(e) {
-    const updatedTodoList = todoList.map((item) => {
-      return item.id === e.id ? { ...item, isDone: !item.isDone } : item;
+  const handleDone = (e) => {
+    setTodoList((prev) => {
+      prev.map((item) => {
+        return item.id === e.id ? { ...item, isDone: !item.isDone } : item;
+      });
     });
-    setTodoList(updatedTodoList);
-  }
+  };
 
   // todo 수정
-  function handleEditMode(e) {
-    setIsEditMode(true);
+  const handleEditMode = (e) => {
     const target = todoList.find((item) => item.id === e.id);
+    setIsEditMode(true);
     setNewTodo(target.content);
     setEditId(target.id);
-  }
-  function EditTodo() {
-    const updatedTodoList = todoList.map((item) => {
-      return item.id === edtitId ? { ...item, content: newTodo } : item;
-    });
-    setTodoList(updatedTodoList);
+  };
+  const EditTodo = () => {
+    setTodoList((prev) =>
+      prev.map((item) =>
+        item.id === edtitId ? { ...item, content: newTodo } : item
+      )
+    );
     setNewTodo("");
     setIsEditMode(false);
-  }
+  };
 
   return (
     <div className={styles.todoContainer}>
@@ -107,7 +108,7 @@ export default function Home() {
               </button>
             )}
           </div>
-          {todoList.length > 0 ? (
+          {todoList && todoList.length > 0 ? (
             todoList.map((item, idx) => {
               return (
                 <li className={styles.todoItem} key={idx}>
