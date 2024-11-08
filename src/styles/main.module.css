@@ -1,0 +1,92 @@
+.todoContainer {
+  width: 100%;
+  height: 100vh;
+  background-color: #b6caeb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.todoBox {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 40px;
+}
+.todoWrite {
+  display: flex;
+  gap: 4px;
+  margin-top: 20px;
+}
+.todoInput {
+  display: block;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.todoButton {
+  width: 100px;
+  height: 40px;
+  font-size: 16px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border-radius: 4px;
+}
+
+.todoList {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+.todoItem {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  font-size: 16px;
+}
+.todoItemLabel {
+  display: flex;
+  gap: 10px;
+  line-height: 40px;
+  width: 100%;
+}
+.todoItemInput {
+  display: block;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.todoItemBtns {
+  display: flex;
+  gap: 4px;
+}
+.btnEdit {
+  width: 60px;
+  height: 40px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+.btnDel {
+  width: 60px;
+  height: 40px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #000;
+  color: #ffffff;
+}
+.btnSubmit {
+  width: 124px;
+  height: 40px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
