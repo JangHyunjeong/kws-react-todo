@@ -1,16 +1,16 @@
-'use client';
-import styles from '@/styles/main.module.css';
-import { useEffect, useState } from 'react';
+"use client";
+import styles from "@/styles/main.module.css";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [newTodo, setNewTodo] = useState('');
+  const [newTodo, setNewTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [edtitId, setEditId] = useState(0);
 
   useEffect(() => {
     // 페이지 로딩 시 localStorage에서 todoData 불러오기
-    const storedData = localStorage.getItem('todoData');
+    const storedData = localStorage.getItem("todoData");
     if (storedData) {
       setTodoList(JSON.parse(storedData));
     }
@@ -18,7 +18,7 @@ export default function Home() {
 
   // localStorage에 todo 저장
   useEffect(() => {
-    localStorage.setItem('todoData', JSON.stringify(todoList));
+    localStorage.setItem("todoData", JSON.stringify(todoList));
   }, [todoList]);
 
   function handleNewTodo(e) {
@@ -27,8 +27,8 @@ export default function Home() {
 
   // newTodo 추가
   function addNewTodo() {
-    if (newTodo.trim() === '') {
-      alert('내용을 입력해주세요');
+    if (newTodo.trim() === "") {
+      alert("내용을 입력해주세요");
       return;
     }
     const todoObj = {
@@ -37,7 +37,7 @@ export default function Home() {
       isDone: false,
     };
     setTodoList([todoObj, ...todoList]);
-    setNewTodo('');
+    setNewTodo("");
   }
 
   // todo 삭제
@@ -66,7 +66,7 @@ export default function Home() {
       return item.id === edtitId ? { ...item, content: newTodo } : item;
     });
     setTodoList(updatedTodoList);
-    setNewTodo('');
+    setNewTodo("");
     setIsEditMode(false);
   }
 
@@ -79,12 +79,12 @@ export default function Home() {
           <div className={styles.todoWrite}>
             <input
               className={styles.todoInput}
-              type='text'
-              placeholder='내용을 입력해주세요'
+              type="text"
+              placeholder="내용을 입력해주세요"
               value={newTodo}
               onChange={(e) => handleNewTodo(e)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   isEditMode ? EditTodo() : addNewTodo();
                 }
               }}
@@ -92,7 +92,7 @@ export default function Home() {
             {isEditMode ? (
               <button
                 className={styles.todoButton}
-                type='button'
+                type="button"
                 onClick={EditTodo}
               >
                 변경완료
@@ -100,7 +100,7 @@ export default function Home() {
             ) : (
               <button
                 className={styles.todoButton}
-                type='button'
+                type="button"
                 onClick={addNewTodo}
               >
                 등록
@@ -113,7 +113,7 @@ export default function Home() {
                 <li className={styles.todoItem} key={idx}>
                   <label className={styles.todoItemLabel}>
                     <input
-                      type='checkbox'
+                      type="checkbox"
                       value={item.isDone}
                       onChange={() => handleDone(item)}
                     ></input>
@@ -121,14 +121,14 @@ export default function Home() {
                   </label>
                   <div className={styles.todoItemBtns}>
                     <button
-                      type='button'
+                      type="button"
                       className={styles.btnEdit}
                       onClick={() => handleEditMode(item)}
                     >
                       수정
                     </button>
                     <button
-                      type='button'
+                      type="button"
                       className={styles.btnDel}
                       onClick={() => deleteTodo(item)}
                     >
