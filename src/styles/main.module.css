@@ -53,6 +53,10 @@
   line-height: 40px;
   width: 100%;
 }
+.done {
+  color: #999;
+  text-decoration: line-through;
+}
 .todoItemInput {
   display: block;
   height: 40px;

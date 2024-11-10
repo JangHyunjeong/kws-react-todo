@@ -7,6 +7,7 @@ import TodoWrite from "@/components/TodoWrite";
 export default function Home() {
   const [newTodo, setNewTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const [filteredTodoList, setFilteredTodoList] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [edtitId, setEditId] = useState(0);
 
@@ -14,13 +15,15 @@ export default function Home() {
     // 페이지 로딩 시 localStorage에서 todoData 불러오기
     const storedData = localStorage.getItem("todoData");
     if (storedData) {
-      setTodoList(JSON.parse(storedData));
+      setTodoList(JSON.parse(storedData) || []);
     }
   }, []);
 
-  // localStorage에 todo 저장
   useEffect(() => {
+    // localStorage에 todo 저장
     localStorage.setItem("todoData", JSON.stringify(todoList));
+    // 완료항목 뒤로
+    setFilteredTodoList(todoList.sort((a, b) => a.isDone - b.isDone));
   }, [todoList]);
 
   function handleNewTodo(e) {
@@ -50,7 +53,7 @@ export default function Home() {
   // todo 완료
   const handleDone = (e) => {
     setTodoList((prev) => {
-      prev.map((item) => {
+      return prev.map((item) => {
         return item.id === e.id ? { ...item, isDone: !item.isDone } : item;
       });
     });
@@ -87,6 +90,7 @@ export default function Home() {
         />
 
         <TodoList
+          filteredTodoList={filteredTodoList}
           todoList={todoList}
           handleDone={handleDone}
           handleEditMode={handleEditMode}

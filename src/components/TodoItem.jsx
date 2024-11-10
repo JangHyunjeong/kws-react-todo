@@ -14,13 +14,14 @@ export default function TodoItem({
           value={todo.isDone}
           onChange={() => handleDone(todo)}
         ></input>
-        <span>{todo.content}</span>
+        <span className={todo.isDone ? styles.done : ""}>{todo.content}</span>
       </label>
       <div className={styles.todoItemBtns}>
         <button
           type="button"
           className={styles.btnEdit}
           onClick={() => handleEditMode(todo)}
+          disabled={todo.isDone}
         >
           수정
         </button>

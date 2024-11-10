@@ -3,15 +3,15 @@ import TodoItem from "@/components/TodoItem.jsx";
 import TodoItemEmpty from "@/components/TodoItemEmpty";
 
 export default function TodoList({
-  todoList,
+  filteredTodoList,
   handleDone,
   handleEditMode,
   deleteTodo,
 }) {
   return (
     <ul className={styles.todoList}>
-      {todoList && todoList.length > 0 ? (
-        todoList.map((todo) => {
+      {filteredTodoList && filteredTodoList.length > 0 ? (
+        filteredTodoList.map((todo) => {
           return (
             <TodoItem
               todo={todo}
