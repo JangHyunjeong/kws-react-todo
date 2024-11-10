@@ -1,6 +1,8 @@
 "use client";
 import styles from "@/styles/main.module.css";
 import { useEffect, useState } from "react";
+import TodoList from "@/components/TodoList";
+import TodoWrite from "@/components/TodoWrite";
 
 export default function Home() {
   const [newTodo, setNewTodo] = useState("");
@@ -76,73 +78,20 @@ export default function Home() {
       <div className={styles.todoBox}>
         <h1>TODO LIST</h1>
 
-        <ul className={styles.todoList}>
-          <div className={styles.todoWrite}>
-            <input
-              className={styles.todoInput}
-              type="text"
-              placeholder="내용을 입력해주세요"
-              value={newTodo}
-              onChange={(e) => handleNewTodo(e)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  isEditMode ? EditTodo() : addNewTodo();
-                }
-              }}
-            ></input>
-            {isEditMode ? (
-              <button
-                className={styles.todoButton}
-                type="button"
-                onClick={EditTodo}
-              >
-                변경완료
-              </button>
-            ) : (
-              <button
-                className={styles.todoButton}
-                type="button"
-                onClick={addNewTodo}
-              >
-                등록
-              </button>
-            )}
-          </div>
-          {todoList && todoList.length > 0 ? (
-            todoList.map((item, idx) => {
-              return (
-                <li className={styles.todoItem} key={idx}>
-                  <label className={styles.todoItemLabel}>
-                    <input
-                      type="checkbox"
-                      value={item.isDone}
-                      onChange={() => handleDone(item)}
-                    ></input>
-                    <span>{item.content}</span>
-                  </label>
-                  <div className={styles.todoItemBtns}>
-                    <button
-                      type="button"
-                      className={styles.btnEdit}
-                      onClick={() => handleEditMode(item)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.btnDel}
-                      onClick={() => deleteTodo(item)}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                </li>
-              );
-            })
-          ) : (
-            <li>오늘의 할일을 입력해주세요!</li>
-          )}
-        </ul>
+        <TodoWrite
+          newTodo={newTodo}
+          isEditMode={isEditMode}
+          handleNewTodo={handleNewTodo}
+          EditTodo={EditTodo}
+          addNewTodo={addNewTodo}
+        />
+
+        <TodoList
+          todoList={todoList}
+          handleDone={handleDone}
+          handleEditMode={handleEditMode}
+          deleteTodo={deleteTodo}
+        />
       </div>
     </div>
   );
