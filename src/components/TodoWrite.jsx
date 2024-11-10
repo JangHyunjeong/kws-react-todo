@@ -1,4 +1,4 @@
-import styles from "@/styles/main.module.css";
+import styles from "@/styles/page.module.css";
 import TodoInput from "@/components/TodoInput";
 
 export default function TodoWrite({

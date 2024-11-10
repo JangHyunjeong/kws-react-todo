@@ -1,5 +1,5 @@
 "use client";
-import styles from "@/styles/main.module.css";
+import styles from "@/styles/page.module.css";
 import { useEffect, useState } from "react";
 import TodoList from "@/components/TodoList";
 import TodoWrite from "@/components/TodoWrite";
