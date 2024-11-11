@@ -3,13 +3,20 @@ import styles from "@/styles/page.module.css";
 import { useEffect, useState } from "react";
 import TodoList from "@/components/TodoList";
 import TodoWrite from "@/components/TodoWrite";
+import TodoFilter from "@/components/TodoFilter";
 
 export default function Home() {
+  const filterList = [
+    { value: "all", lable: "전체" },
+    { value: "ing", lable: "진행중" },
+    { value: "done", lable: "완료" },
+  ];
   const [newTodo, setNewTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
   const [filteredTodoList, setFilteredTodoList] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [edtitId, setEditId] = useState(0);
+  const [filterValue, setFilterValue] = useState(filterList[0].value);
 
   useEffect(() => {
     // 페이지 로딩 시 localStorage에서 todoData 불러오기
@@ -21,10 +28,16 @@ export default function Home() {
 
   useEffect(() => {
     // localStorage에 todo 저장
-    localStorage.setItem("todoData", JSON.stringify(todoList));
-    // 완료항목 뒤로
-    setFilteredTodoList(todoList.sort((a, b) => a.isDone - b.isDone));
-  }, [todoList]);
+    localStorage.setItem("todoData", JSON.stringify(todoList || []));
+
+    // todo filtering
+    const filterMap = {
+      all: todoList.sort((a, b) => a.isDone - b.isDone),
+      ing: todoList?.filter((item) => !item.isDone),
+      done: todoList.filter((item) => item.isDone),
+    };
+    setFilteredTodoList(filterMap[filterValue] || []);
+  }, [todoList, filterValue]);
 
   function handleNewTodo(e) {
     setNewTodo(e.target.value);
@@ -76,6 +89,11 @@ export default function Home() {
     setIsEditMode(false);
   };
 
+  // 필터 변경
+  const filterTodo = (e) => {
+    setFilterValue(e.target.value);
+  };
+
   return (
     <div className={styles.todoContainer}>
       <div className={styles.todoBox}>
@@ -87,6 +105,12 @@ export default function Home() {
           handleNewTodo={handleNewTodo}
           EditTodo={EditTodo}
           addNewTodo={addNewTodo}
+        />
+
+        <TodoFilter
+          filterList={filterList}
+          filteredTodoListLength={filteredTodoList?.length}
+          filterTodo={filterTodo}
         />
 
         <TodoList
