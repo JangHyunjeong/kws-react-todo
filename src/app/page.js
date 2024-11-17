@@ -2,8 +2,8 @@
 import styles from "@/styles/page.module.css";
 import { useEffect, useState } from "react";
 import TodoList from "@/components/TodoList";
-import TodoForm from "@/components/TodoForm";
 import TodoFilter from "@/components/TodoFilter";
+import TodoForm from "@/components/TodoForm";
 
 export default function Home() {
   const filterList = [
@@ -110,15 +110,18 @@ export default function Home() {
           addNewTodo={addNewTodo}
         />
 
-        <TodoFilter
-          filterList={filterList}
-          filteredTodoListLength={filteredTodoList?.length}
-          filterTodo={filterTodo}
-        />
+        <div className={styles.todoSelectWrap}>
+          <span className={styles.todoCount}>
+            총 {filteredTodoList?.length || 0}건
+          </span>
+          <TodoFilter filterList={filterList} filterTodo={filterTodo} />
+        </div>
 
         <TodoList
+          filterList={filterList}
           filteredTodoList={filteredTodoList}
           todoList={todoList}
+          filterTodo={filterTodo}
           handleDone={handleDone}
           handleEditMode={handleEditMode}
           deleteTodo={deleteTodo}
