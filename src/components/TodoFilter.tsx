@@ -1,6 +1,10 @@
+import { TodoFilterProps } from "@/types/todo";
 import styles from "@/styles/page.module.css";
 
-export default function TodoFilter({ filterList, filterTodo }) {
+export default function TodoFilter({
+  filterList,
+  filterTodo,
+}: TodoFilterProps) {
   return (
     <select
       onChange={(e) => filterTodo(e.target.value)}

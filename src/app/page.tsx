@@ -1,23 +1,28 @@
 "use client";
-import styles from "@/styles/page.module.css";
+// library
 import { useEffect, useState } from "react";
 import { v4 as uuid4 } from "uuid";
+// components
 import TodoList from "@/components/TodoList";
 import TodoFilter from "@/components/TodoFilter";
 import TodoForm from "@/components/TodoForm";
+// types
+import { Todo, FilterItem, TodoFilterMapType } from "@/types/todo";
+// styles
+import styles from "@/styles/page.module.css";
 
 export default function Home() {
-  const filterList = [
+  const filterList: FilterItem[] = [
     { value: "all", lable: "전체" },
     { value: "ing", lable: "진행중" },
     { value: "done", lable: "완료" },
   ];
-  const [newTodo, setNewTodo] = useState("");
-  const [todoList, setTodoList] = useState([]);
-  const [filteredTodoList, setFilteredTodoList] = useState([]);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editId, setEditId] = useState(0);
-  const [filterValue, setFilterValue] = useState(filterList[0].value);
+  const [newTodo, setNewTodo] = useState<string>("");
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [editId, setEditId] = useState<string>("");
+  const [filterValue, setFilterValue] = useState<string>(filterList[0].value);
 
   useEffect(() => {
     // 페이지 로딩 시 localStorage에서 todoData 불러오기
@@ -30,20 +35,23 @@ export default function Home() {
     localStorage.setItem("todoData", JSON.stringify(todoList || []));
 
     // todo filtering
-    const filterMap = {
-      all: todoList?.sort((a, b) => a.isDone - b.isDone),
-      ing: todoList?.filter((item) => !item.isDone),
-      done: todoList?.filter((item) => item.isDone),
+    const filterMap: TodoFilterMapType = {
+      all: [
+        ...todoList.filter((item) => !item.isDone),
+        ...todoList.filter((item) => item.isDone),
+      ],
+      ing: todoList.filter((item) => !item.isDone),
+      done: todoList.filter((item) => item.isDone),
     };
-    setFilteredTodoList(filterMap[filterValue] || []);
+    setFilteredTodoList(filterMap[filterValue as FilterItem["value"]]);
   }, [todoList, filterValue]);
 
-  function handleNewTodo(inputValue) {
+  function handleNewTodo(inputValue: string) {
     setNewTodo(inputValue);
   }
 
   // newTodo 추가
-  const addNewTodo = (e) => {
+  const addNewTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newTodo.trim() === "") {
       alert("내용을 입력해주세요");
@@ -59,12 +67,12 @@ export default function Home() {
   };
 
   // todo 삭제
-  const deleteTodo = (todo) => {
+  const deleteTodo = (todo: Todo) => {
     setTodoList((prevTodo) => prevTodo.filter((item) => item.id !== todo.id));
   };
 
   // todo 완료
-  const handleDone = (todo) => {
+  const handleDone = (todo: Todo) => {
     setTodoList((prevTodo) => {
       return prevTodo.map((item) => {
         return item.id === todo.id ? { ...item, isDone: !item.isDone } : item;
@@ -73,13 +81,14 @@ export default function Home() {
   };
 
   // todo 수정
-  const handleEditMode = (todo) => {
+  const handleEditMode = (todo: Todo) => {
     const target = todoList.find((item) => item.id === todo.id);
+    if (!target) return;
     setIsEditMode(true);
     setNewTodo(target.content);
     setEditId(target.id);
   };
-  const editTodo = (e) => {
+  const editTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setTodoList((prevTodo) =>
       prevTodo.map((item) =>
@@ -91,8 +100,8 @@ export default function Home() {
   };
 
   // 필터 변경
-  const filterTodo = (inputValue) => {
-    setFilterValue(inputValue);
+  const filterTodo = (selectValue: FilterItem["value"]) => {
+    setFilterValue(selectValue);
   };
 
   return (
@@ -116,10 +125,7 @@ export default function Home() {
         </div>
 
         <TodoList
-          filterList={filterList}
           filteredTodoList={filteredTodoList}
-          todoList={todoList}
-          filterTodo={filterTodo}
           handleDone={handleDone}
           handleEditMode={handleEditMode}
           deleteTodo={deleteTodo}

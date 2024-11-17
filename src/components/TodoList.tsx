@@ -1,12 +1,13 @@
+import TodoItem from "@/components/TodoItem";
+import { TodoListProps } from "@/types/todo";
 import styles from "@/styles/page.module.css";
-import TodoItem from "@/components/TodoItem.jsx";
 
 export default function TodoList({
   filteredTodoList,
   handleDone,
   handleEditMode,
   deleteTodo,
-}) {
+}: TodoListProps) {
   return (
     <>
       <ul className={styles.todoList}>

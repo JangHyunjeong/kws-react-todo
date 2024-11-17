@@ -1,3 +1,4 @@
+import { TodoItemProps } from "@/types/todo";
 import styles from "@/styles/page.module.css";
 
 export default function TodoItem({
@@ -5,7 +6,7 @@ export default function TodoItem({
   handleDone,
   handleEditMode,
   deleteTodo,
-}) {
+}: TodoItemProps) {
   return (
     <li className={styles.todoItem}>
       <label className={styles.todoItemLabel}>

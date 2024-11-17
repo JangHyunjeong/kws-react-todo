@@ -1,3 +1,4 @@
+import { TodoFormProps } from "@/types/todo";
 import styles from "@/styles/page.module.css";
 
 export default function TodoWrite({
@@ -6,7 +7,7 @@ export default function TodoWrite({
   handleNewTodo,
   editTodo,
   addNewTodo,
-}) {
+}: TodoFormProps) {
   return (
     <form
       onSubmit={isEditMode ? editTodo : addNewTodo}
