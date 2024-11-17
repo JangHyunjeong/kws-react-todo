@@ -11,7 +11,7 @@ export default function TodoItem({
       <label className={styles.todoItemLabel}>
         <input
           type="checkbox"
-          value={todo.isDone}
+          checked={todo.isDone}
           onChange={() => handleDone(todo)}
         ></input>
         <span className={todo.isDone ? styles.done : ""}>{todo.content}</span>
