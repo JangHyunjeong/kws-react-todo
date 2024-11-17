@@ -2,7 +2,7 @@
 import styles from "@/styles/page.module.css";
 import { useEffect, useState } from "react";
 import TodoList from "@/components/TodoList";
-import TodoWrite from "@/components/TodoWrite";
+import TodoForm from "@/components/TodoForm";
 import TodoFilter from "@/components/TodoFilter";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
   const [todoList, setTodoList] = useState([]);
   const [filteredTodoList, setFilteredTodoList] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [edtitId, setEditId] = useState(0);
+  const [editId, setEditId] = useState(0);
   const [filterValue, setFilterValue] = useState(filterList[0].value);
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export default function Home() {
 
     // todo filtering
     const filterMap = {
-      all: todoList.sort((a, b) => a.isDone - b.isDone),
+      all: todoList?.sort((a, b) => a.isDone - b.isDone),
       ing: todoList?.filter((item) => !item.isDone),
-      done: todoList.filter((item) => item.isDone),
+      done: todoList?.filter((item) => item.isDone),
     };
     setFilteredTodoList(filterMap[filterValue] || []);
   }, [todoList, filterValue]);
@@ -44,7 +44,9 @@ export default function Home() {
   }
 
   // newTodo 추가
-  const addNewTodo = () => {
+  const addNewTodo = (e) => {
+    e.preventDefault();
+
     if (newTodo.trim() === "") {
       alert("내용을 입력해주세요");
       return;
@@ -79,10 +81,11 @@ export default function Home() {
     setNewTodo(target.content);
     setEditId(target.id);
   };
-  const EditTodo = () => {
+  const editTodo = (e) => {
+    e.preventDefault();
     setTodoList((prev) =>
       prev.map((item) =>
-        item.id === edtitId ? { ...item, content: newTodo } : item
+        item.id === editId ? { ...item, content: newTodo } : item
       )
     );
     setNewTodo("");
@@ -99,11 +102,11 @@ export default function Home() {
       <div className={styles.todoBox}>
         <h1>TODO LIST</h1>
 
-        <TodoWrite
+        <TodoForm
           newTodo={newTodo}
           isEditMode={isEditMode}
           handleNewTodo={handleNewTodo}
-          EditTodo={EditTodo}
+          editTodo={editTodo}
           addNewTodo={addNewTodo}
         />
 
