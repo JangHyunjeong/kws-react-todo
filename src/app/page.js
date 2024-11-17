@@ -1,6 +1,7 @@
 "use client";
 import styles from "@/styles/page.module.css";
 import { useEffect, useState } from "react";
+import { v4 as uuid4 } from "uuid";
 import TodoList from "@/components/TodoList";
 import TodoFilter from "@/components/TodoFilter";
 import TodoForm from "@/components/TodoForm";
@@ -21,9 +22,7 @@ export default function Home() {
   useEffect(() => {
     // 페이지 로딩 시 localStorage에서 todoData 불러오기
     const storedData = localStorage.getItem("todoData");
-    if (storedData) {
-      setTodoList(JSON.parse(storedData) || []);
-    }
+    if (storedData) setTodoList(JSON.parse(storedData) || []);
   }, []);
 
   useEffect(() => {
@@ -39,52 +38,51 @@ export default function Home() {
     setFilteredTodoList(filterMap[filterValue] || []);
   }, [todoList, filterValue]);
 
-  function handleNewTodo(e) {
-    setNewTodo(e.target.value);
+  function handleNewTodo(inputValue) {
+    setNewTodo(inputValue);
   }
 
   // newTodo 추가
   const addNewTodo = (e) => {
     e.preventDefault();
-
     if (newTodo.trim() === "") {
       alert("내용을 입력해주세요");
       return;
     }
     const todoObj = {
-      id: Date.now(),
+      id: uuid4(),
       content: newTodo,
       isDone: false,
     };
-    setTodoList((prev) => [todoObj, ...prev]);
+    setTodoList((prevTodo) => [todoObj, ...prevTodo]);
     setNewTodo("");
   };
 
   // todo 삭제
-  const deleteTodo = (e) => {
-    setTodoList((prev) => prev.filter((item) => item.id !== e.id));
+  const deleteTodo = (todo) => {
+    setTodoList((prevTodo) => prevTodo.filter((item) => item.id !== todo.id));
   };
 
   // todo 완료
-  const handleDone = (e) => {
-    setTodoList((prev) => {
-      return prev.map((item) => {
-        return item.id === e.id ? { ...item, isDone: !item.isDone } : item;
+  const handleDone = (todo) => {
+    setTodoList((prevTodo) => {
+      return prevTodo.map((item) => {
+        return item.id === todo.id ? { ...item, isDone: !item.isDone } : item;
       });
     });
   };
 
   // todo 수정
-  const handleEditMode = (e) => {
-    const target = todoList.find((item) => item.id === e.id);
+  const handleEditMode = (todo) => {
+    const target = todoList.find((item) => item.id === todo.id);
     setIsEditMode(true);
     setNewTodo(target.content);
     setEditId(target.id);
   };
   const editTodo = (e) => {
     e.preventDefault();
-    setTodoList((prev) =>
-      prev.map((item) =>
+    setTodoList((prevTodo) =>
+      prevTodo.map((item) =>
         item.id === editId ? { ...item, content: newTodo } : item
       )
     );
@@ -93,8 +91,8 @@ export default function Home() {
   };
 
   // 필터 변경
-  const filterTodo = (e) => {
-    setFilterValue(e.target.value);
+  const filterTodo = (inputValue) => {
+    setFilterValue(inputValue);
   };
 
   return (

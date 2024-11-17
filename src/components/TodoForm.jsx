@@ -17,7 +17,7 @@ export default function TodoWrite({
         type="text"
         placeholder="내용을 입력해주세요"
         value={newTodo}
-        onChange={(e) => handleNewTodo(e)}
+        onChange={(e) => handleNewTodo(e.target.value)}
       ></input>
       <button className={styles.todoButton} type="submit">
         {isEditMode ? "변경완료" : "등록"}
