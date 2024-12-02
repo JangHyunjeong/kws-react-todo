@@ -1,7 +1,7 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
+import { createSlice } from "@reduxjs/toolkit";
 import { Todo, TodoFilterMapType, FilterItem } from "@/types/todo";
 import { v4 as uuid4 } from "uuid";
+
 interface TodoState {
   newTodo: string;
   todoList: Todo[];
@@ -11,13 +11,19 @@ interface TodoState {
   filterValue: string;
 }
 
+export const filterList: FilterItem[] = [
+  { value: "all", lable: "전체" },
+  { value: "ing", lable: "진행중" },
+  { value: "done", lable: "완료" },
+];
+
 const initialState: TodoState = {
   newTodo: "",
   todoList: [],
   filteredTodoList: [],
   isEditMode: false,
   editId: "",
-  filterValue: "all",
+  filterValue: filterList[0].value,
 };
 
 export const todoSlice = createSlice({
@@ -44,8 +50,10 @@ export const todoSlice = createSlice({
       state.filteredTodoList =
         filterMap[state.filterValue as FilterItem["value"]];
     },
-    addNewTodo: (state, action) => {
-      action.payload.preventDefault();
+    handleNewTodo: (state, newTodo) => {
+      state.newTodo = newTodo.payload;
+    },
+    addNewTodo: (state) => {
       if (state.newTodo.trim() === "") {
         alert("내용을 입력해주세요");
         return;
@@ -58,11 +66,51 @@ export const todoSlice = createSlice({
       state.todoList = [todoObj, ...state.todoList];
       state.newTodo = "";
     },
+    deleteTodo: (state, todo) => {
+      state.todoList = [...state.todoList].filter(
+        (item) => item.id !== todo.payload.id
+      );
+    },
+    handleDone: (state, todo) => {
+      state.todoList = [...state.todoList].map((item) => {
+        return item.id === todo.payload.id
+          ? { ...item, isDone: !item.isDone }
+          : item;
+      });
+    },
+    handleEditMode: (state, todo) => {
+      const target = [...state.todoList].find(
+        (item) => item.id === todo.payload.id
+      );
+      if (!target) return;
+      state.isEditMode = true;
+      state.newTodo = target.content;
+      state.editId = target.id;
+    },
+    editTodo: (state) => {
+      state.todoList = [...state.todoList].map((item) =>
+        item.id === state.editId ? { ...item, content: state.newTodo } : item
+      );
+      state.newTodo = "";
+      state.isEditMode = true;
+    },
+    filterTodo: (state, selectedValue) => {
+      state.filterValue = selectedValue.payload;
+    },
   },
 });
 
-export const { initTodoList, getFilteredTodoList, addNewTodo } =
-  todoSlice.actions;
+export const {
+  initTodoList,
+  getFilteredTodoList,
+  handleNewTodo,
+  addNewTodo,
+  deleteTodo,
+  handleDone,
+  handleEditMode,
+  editTodo,
+  filterTodo,
+} = todoSlice.actions;
 
 const todoReducer = todoSlice.reducer;
 export default todoReducer;
