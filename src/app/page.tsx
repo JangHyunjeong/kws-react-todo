@@ -11,7 +11,13 @@ import { Todo, FilterItem, TodoFilterMapType } from "@/types/todo";
 // styles
 import styles from "@/styles/page.module.css";
 
+// store
+import { initTodoList } from "@/stores/todoSlice";
+import { useAppDispatch } from "@/stores/hooks";
+
 export default function Home() {
+  const dispatch = useAppDispatch();
+
   const filterList: FilterItem[] = [
     { value: "all", lable: "전체" },
     { value: "ing", lable: "진행중" },
@@ -25,9 +31,7 @@ export default function Home() {
   const [filterValue, setFilterValue] = useState<string>(filterList[0].value);
 
   useEffect(() => {
-    // 페이지 로딩 시 localStorage에서 todoData 불러오기
-    const storedData = localStorage.getItem("todoData");
-    if (storedData) setTodoList(JSON.parse(storedData) || []);
+    dispatch(initTodoList());
   }, []);
 
   useEffect(() => {
